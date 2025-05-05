@@ -1,95 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Project Setup Guide</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f9f9f9;
-      color: #333;
-      padding: 40px;
-    }
+# 🚀 Run This Project on Localhost
 
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background: #fff;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
+Follow the steps below to set up and run this project on your local machine:
 
-    h1 {
-      text-align: center;
-      color: #0d6efd;
-    }
+---
 
-    ol {
-      margin-top: 30px;
-    }
+## 🔧 Steps to Get Started
 
-    li {
-      margin-bottom: 20px;
-      font-size: 1.1rem;
-    }
+### 📁 Step 1: Clone or Download
+- **Option 1 (Clone)**:
+  ```bash
+  git clone https://github.com/your-username/your-repo-name.git
+📂 Step 2: Navigate to Project Folder
+After extraction or cloning, open your terminal and move into the project directory:
 
-    code {
-      background-color: #eef;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-family: monospace;
-    }
+bash
+Copy
+Edit
+cd your-project-folder
+📦 Step 3: Install Dependencies
+Install all the required Node.js packages using:
 
-    .tip {
-      background-color: #fff3cd;
-      border-left: 6px solid #ffc107;
-      padding: 10px 20px;
-      border-radius: 6px;
-      margin-top: 10px;
-      font-size: 0.95rem;
-    }
+bash
+Copy
+Edit
+npm install
+▶️ Step 4: Start the Server
+Start your local server using:
 
-    footer {
-      margin-top: 40px;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #aaa;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>🚀 Run This Project on Localhost</h1>
-    <ol>
-      <li>
-        <strong>Step 1:</strong> Download the project as a ZIP file or clone the repository using:<br/>
-        <code>git clone https://github.com/your-username/your-repo-name.git</code>
-      </li>
+bash
+Copy
+Edit
+nodemon server.js
+⚠️ Note: If nodemon is not installed globally, install it first with:
 
-      <li>
-        <strong>Step 2:</strong> Extract the ZIP (if downloaded), then open your terminal and navigate to the project folder.
-      </li>
+bash
+Copy
+Edit
+npm install -g nodemon
+📌 Tips
+Make sure Node.js and npm are installed on your system.
 
-      <li>
-        <strong>Step 3:</strong> Install the required dependencies:<br/>
-        <code>npm install</code>
-      </li>
-
-      <li>
-        <strong>Step 4:</strong> Start the server using:<br/>
-        <code>nodemon server.js</code><br/>
-        <div class="tip">
-          💡 If <code>nodemon</code> is not installed globally, run:<br/>
-          <code>npm install -g nodemon</code>
-        </div>
-      </li>
-    </ol>
-
-    <footer>
-      &copy; 2025 Your Project Name. All rights reserved.
-    </footer>
-  </div>
-</body>
-</html>
+If you encounter permission issues, try using sudo (for Mac/Linux).
