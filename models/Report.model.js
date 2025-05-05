@@ -6,7 +6,9 @@ const reportSchema = mongoose.Schema({
     required: true
     
   },
-
+  docId:{
+    type:String,
+  } ,
   docName: {
     type: String,
     required: true,

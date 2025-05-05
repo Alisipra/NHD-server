@@ -21,6 +21,7 @@ router.post("/create", async (req, res) => {
     const {
       patientID,
         docName,
+        docId,
         docDepartment,
         docMobile,
         medicines,
@@ -54,6 +55,7 @@ router.post("/create", async (req, res) => {
     const newReport = new ReportModel({
       patientID: patient.patientID,
       docName,
+      docId,
       docDepartment,
       docMobile,
       patientName: patientName || patient.patientName,

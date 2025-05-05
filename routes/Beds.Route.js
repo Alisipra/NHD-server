@@ -25,7 +25,16 @@ router.get("/available", async (req, res) => {
     res.status(400).send({ error: "Something went wrong" });
   }
 });
-
+// Get all beds in a specific ward
+router.get('/by-ward/:wardName', async (req, res) => {
+  const { wardName } = req.params;  // Get ward name from URL
+  try {
+    const beds = await BedModel.find({ ward: wardName });  // Find beds by ward
+    res.status(200).json(beds);  // Return the list of beds in that ward
+  } catch (error) {
+    res.status(500).send({ error: 'Unable to fetch beds by ward' });
+  }
+});
 router.post("/single", async (req, res) => {
   const { bedNumber, roomNumber } = req.body;
   try {
@@ -43,7 +52,7 @@ router.post("/single", async (req, res) => {
 });
 
 router.post("/add", async (req, res) => {
-  const { bedNumber, roomNumber } = req.body;
+  const { bedNumber, roomNumber,ward } = req.body;
 
   try {
     const bed = await BedModel.find({ bedNumber, roomNumber });

@@ -18,7 +18,11 @@ const patientSchema = mongoose.Schema({
 
   mobile: {
     type: Number,
-    minlength: 10,
+    minlength: 11,
+  },
+ emergencyNo :{
+    type: Number,
+    minlength: 11,
   },
 
   email: {
@@ -37,7 +41,9 @@ const patientSchema = mongoose.Schema({
   department: {
     type: String,
   },
-
+  ward: {
+    type: String,
+  },
   gender: {
     type: String,
   },

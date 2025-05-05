@@ -1,8 +1,49 @@
 // routes/history.js
 const express = require("express");
 const router = express.Router();
+const { DoctorModel } = require("../models/Doctor.model");
 const MedicalHistory = require("../models/MedicalHistory.model");
 const {PatientModel}=require("../models/Patient.model");
+
+// report img uplaod setup
+
+
+const multer = require("multer");
+const { cloudinary } = require("../cloudinaryConfig");
+// Set up multer storage (memoryStorage for uploading directly to Cloudinary)
+const multerStorage = multer.memoryStorage();
+const upload = multer({ storage: multerStorage });
+
+// Route to upload the test report
+router.post("/upload-report", upload.single("testReport"), async (req, res) => {
+  try {
+    // Upload image to Cloudinary
+    const result = await cloudinary.uploader.upload(req.file.buffer, {
+      resource_type: "auto", // Automatically detect file type (e.g., image, pdf)
+    });
+
+    // Get file URL from Cloudinary response
+    const testReportUrl = result.secure_url;
+
+    // You can then save this URL to your database (example with medical history)
+    const { patientID, doctorID, diagnosis, prescription, notes } = req.body;
+    const newHistory = new MedicalHistory({
+      patientID,
+      doctorID,
+      diagnosis,
+      prescription,
+      notes,
+      testReport: testReportUrl,  // Store the image URL in the medical history
+    });
+
+    await newHistory.save();
+    res.status(201).json({ message: "Report uploaded successfully", newHistory });
+  } catch (error) {
+    console.error("Error uploading test report:", error);
+    res.status(500).json({ message: "Error uploading test report", error: error.message });
+  }
+});
+
 
 // Create a medical history record
 router.post("/add", async (req, res) => {
@@ -59,15 +100,15 @@ router.get("/:cnic", async (req, res) => {
 
     // Find patient by patientID (Ensure patientID exists in your schema)
     const patient = await PatientModel.findOne({ patientID });
-    // console.log("🩺 Patient Data:", patient);
+    
 
     if (!patient) {
       return res.status(404).json({ message: "Patient not found" });
     }
 
     // Fetch medical history - Use find() to get all records, or findOne() for the latest
-    const history = await MedicalHistory.find({ patientID });
-    // console.log("📚 Medical History Data:", history);
+    // const history = await MedicalHistory.find({ patientID });
+    const history = await MedicalHistory.find({ patientID }).populate("doctorID", "docName");
 
 
     // Ensure history is always an array

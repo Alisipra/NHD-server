@@ -18,6 +18,7 @@ const doctorSchema = mongoose.Schema({
 
   mobile: {
     type: Number,
+    minlength: 11,
   },
 
   email: {

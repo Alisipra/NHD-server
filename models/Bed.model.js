@@ -14,7 +14,10 @@ const bedSchema = mongoose.Schema({
   occupied: {
     type: String,
   },
-
+  ward: {
+    type: String,
+    // required: true,  // e.g., "Cardiology", "Neurology", "ICU"
+  },
   patientID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "patient",

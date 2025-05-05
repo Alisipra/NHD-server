@@ -3,7 +3,9 @@ const  {PatientModel}  = require("../models/Patient.model");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const { ReportModel } = require("../models/Report.model");
-const MedicalHistory = require("../models/MedicalHistory.model")
+const MedicalHistory = require("../models/MedicalHistory.model");
+const { IPDPatientModel } = require("../models/IPD.model");
+const { BedModel } = require("../models/Bed.model");
 const router = express.Router();
 
 // ✅ Fetch all patients
@@ -39,7 +41,7 @@ router.get("/", async (req, res) => {
 //   }
 // });
 router.post("/register", async (req, res) => {
-  const { patientID, patientName, age, gender, mobile, bloodGroup, email } = req.body;
+  const { patientID, patientName, age, gender, mobile,emergencyNo, bloodGroup, email,ward,password } = req.body;
 
   try {
     // Check if patient already exists
@@ -55,11 +57,14 @@ router.post("/register", async (req, res) => {
     const newPatient = new PatientModel({
       patientID,
       patientName: patientName || "Unknown",
-      age: age || 0,
+      age: age || "",
       gender: gender || "Unknown",
       mobile: parseInt(mobile) || 300516661761,
+      emergencyNo: emergencyNo || "N/A",
       bloodGroup: bloodGroup || "Unknown",
       email: email || "N/A",
+      ward: ward || "N/A",
+      password:password ||"123456789"
     });
 
     await newPatient.save();
@@ -69,6 +74,90 @@ router.post("/register", async (req, res) => {
     return res.status(500).json({ error: "Failed to register patient." });
   }
 });
+
+router.post("/admitPatient", async (req, res) => {
+  const {
+    patientID,
+    patientName,
+    age,
+    gender,
+    mobile,
+    emergencyNo,
+    bloodGroup,
+    email,
+    ward,
+    bedNumber,
+    reasonForAdmission,
+    guardianName,
+    guardianContact,
+    doctorAssigned,
+    docID,
+    nurseID,
+    DOB,
+    address,
+    disease,
+    test,
+    department,
+    roomNo
+  } = req.body;
+
+
+  try {
+    // Check if patient already exists by patientID
+    const patientExists = await IPDPatientModel.findOne({ patientID, admitted: true });
+
+    if (patientExists) {
+      return res.status(409).json({
+        message: "Patient already exists",
+        id: patientExists.patientID,
+      });
+    }
+
+    // Create a new IPD patient
+    const newPatient = new IPDPatientModel({
+      patientID,
+      patientName: patientName || "Unknown",
+      age: age || 0,
+      gender: gender || "Unknown",
+      mobile: mobile || "",
+      emergencyNo: emergencyNo || "",
+      bloodGroup: bloodGroup || "Unknown",
+      email: email || "N/A",
+      ward: ward || "General",
+      bedNumber: bedNumber || "N/A",
+      reasonForAdmission: reasonForAdmission || "N/A",
+      guardianName: guardianName || "N/A",
+      guardianContact: guardianContact || "N/A",
+      doctorAssigned: doctorAssigned || "N/A",
+      docID: docID || null,
+      nurseID: nurseID || null,
+      DOB: DOB || null,
+      address: address || "",
+      disease: disease || "",
+      test: test || "",
+      department: department || "",
+      roomNo: roomNo || "",
+    });
+
+    await newPatient.save();
+
+
+     // 2. Update bed status to 'occupied'
+     await BedModel.findOneAndUpdate(
+      { bedNumber, roomNumber: roomNo },
+      { occupied: "occupied" }
+    );
+    return res.status(201).json({
+      message: "Patient admitted successfully.",
+      id: newPatient.patientID,
+      newPatient,
+    });
+  } catch (error) {
+    console.error("Error during patient admission:", error);
+    return res.status(500).json({ error: "Failed to admit patient." });
+  }
+});
+
 
 // ✅ Patient Login
 router.post("/login", async (req, res) => {
