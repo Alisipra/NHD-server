@@ -1,43 +1,8 @@
-# 🚀 Run This Project on Localhost
+<h1> Steps to Run this project on LOCALHOST:</h1> <br/>
+<h3>Step 1:</h3> <h4>Download as zip / clone into your system</h4><br/>
+<h3>Step 2:</h3> After extraction go to the folder where downloaded and install<br/>
+<h3>Step 3:</h3> run this command [npm install]<br/>
+<h3>Step 4:</h3> Update your .env file with mongodb url, jwt secret and portnumber <br/>
+<h3>Step 5:</h3> run [nodemon server.js] {only if nodemon is install otherwise first install nodemon using the command as [npm i nodemon -g]<br/>
+<h3>Step 6:</h3> finally your server is UP now...<br/>
 
-Follow the steps below to set up and run this project on your local machine:
-
----
-
-## 🔧 Steps to Get Started
-
-### 📁 Step 1: Clone or Download
-- **Option 1 (Clone)**:
-  ```bash
-  git clone https://github.com/your-username/your-repo-name.git
-📂 Step 2: Navigate to Project Folder
-After extraction or cloning, open your terminal and move into the project directory:
-
-bash
-Copy
-Edit
-cd your-project-folder
-📦 Step 3: Install Dependencies
-Install all the required Node.js packages using:
-
-bash
-Copy
-Edit
-npm install
-▶️ Step 4: Start the Server
-Start your local server using:
-
-bash
-Copy
-Edit
-nodemon server.js
-⚠️ Note: If nodemon is not installed globally, install it first with:
-
-bash
-Copy
-Edit
-npm install -g nodemon
-📌 Tips
-Make sure Node.js and npm are installed on your system.
-
-If you encounter permission issues, try using sudo (for Mac/Linux).
