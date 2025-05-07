@@ -8,7 +8,7 @@ const { IPDPatientModel } = require("../models/IPD.model");
 const { BedModel } = require("../models/Bed.model");
 const router = express.Router();
 
-// ✅ Fetch all patients
+//  Fetch all patients
 router.get("/", async (req, res) => {
   try {
     const patients = await PatientModel.find();
@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// ✅ Register a patient (Admin or Doctor)
+//  Register a patient (Admin or Doctor)
 // router.post("/register", async (req, res) => {
 //   const { patientID } = req.body;
 
@@ -41,6 +41,7 @@ router.get("/", async (req, res) => {
 //   }
 // });
 router.post("/register", async (req, res) => {
+  ////const { patientID, patientName, age, gender, mobile,emergencyNo, bloodGroup, email,ward,password } = req.body;
   const { patientID, patientName, age, gender, mobile,emergencyNo, bloodGroup, email,ward,password } = req.body;
 
   try {
@@ -57,10 +58,12 @@ router.post("/register", async (req, res) => {
     const newPatient = new PatientModel({
       patientID,
       patientName: patientName || "Unknown",
-      age: age || "",
+      age: age ? parseInt(age) : 0,
+
       gender: gender || "Unknown",
-      mobile: parseInt(mobile) || 300516661761,
-      emergencyNo: emergencyNo || "N/A",
+      mobile: mobile || "0000000000",
+
+      emergencyNo: emergencyNo,
       bloodGroup: bloodGroup || "Unknown",
       email: email || "N/A",
       ward: ward || "N/A",
@@ -120,7 +123,7 @@ router.post("/admitPatient", async (req, res) => {
       age: age || 0,
       gender: gender || "Unknown",
       mobile: mobile || "",
-      emergencyNo: emergencyNo || "",
+      emergencyNo: emergencyNo ,
       bloodGroup: bloodGroup || "Unknown",
       email: email || "N/A",
       ward: ward || "General",
@@ -159,7 +162,7 @@ router.post("/admitPatient", async (req, res) => {
 });
 
 
-// ✅ Patient Login
+//  Patient Login
 router.post("/login", async (req, res) => {
   const { patientID, password } = req.body;
 
@@ -192,7 +195,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// ✅ Update Patient Info (Admin Only)
+//  Update Patient Info (Admin Only)
 router.patch("/:patientId", async (req, res) => {
   const id = req.params.patientId;
   const payload = req.body;
@@ -211,7 +214,7 @@ router.patch("/:patientId", async (req, res) => {
   }
 });
 
-// ✅ Delete Patient (Admin Only)
+//  Delete Patient (Admin Only)
 router.delete("/:patientId", async (req, res) => {
   const id = req.params.patientId;
 

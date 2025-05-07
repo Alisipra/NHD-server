@@ -51,9 +51,9 @@ router.get("/", authenticate, async (req, res) => {
 
 router.post("/create", async (req, res) => {
   const payload = req.body;
-  if (Object.values(payload).some((value) => !value)) {
-    return res.status(400).json({ message: "Please fill all the required fields." });
-  }
+  // if (Object.values(payload).some((value) => !value)) {
+  //   return res.status(400).json({ message: "Please fill all the required fields." });
+  // }
   try {
    
     const appointment = new AppointmentModel(payload);

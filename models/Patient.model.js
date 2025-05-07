@@ -23,6 +23,8 @@ const patientSchema = mongoose.Schema({
  emergencyNo :{
     type: Number,
     minlength: 11,
+    require:false,
+    default:null
   },
 
   email: {
@@ -43,6 +45,8 @@ const patientSchema = mongoose.Schema({
   },
   ward: {
     type: String,
+    require:false,
+    default:"general"
   },
   gender: {
     type: String,
