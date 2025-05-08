@@ -4,16 +4,16 @@ const { authenticate } = require("../middlewares/doctorAuth");
 const { default: mongoose } = require("mongoose");
 const router = express.Router();
 
-// router.get("/", async (req, res) => {
-//   let query = req.query;
-//   try {
-//     const appointments = await AppointmentModel.find(query);
-//     res.status(200).send(appointments);
-//   } catch (error) {
-//     console.log(error);
-//     res.status(400).send({ error: "Something went wrong" });
-//   }
-// });
+router.get("/", async (req, res) => {
+  let query = req.query;
+  try {
+    const appointments = await AppointmentModel.find(query);
+    res.status(200).send(appointments);
+  } catch (error) {
+    console.log(error);
+    res.status(400).send({ error: "Something went wrong" });
+  }
+});
 // get specific doctors appointments
 // router.get("/", async (req, res) => {
 //   try {
@@ -30,24 +30,26 @@ const router = express.Router();
 //       res.status(500).json({ message: "Server error" });
 //   }
 // });
-router.get("/", authenticate, async (req, res) => {
-  try {
-    const { doctorID } = req.user; // Extract doctorID from middleware
 
-    if (!doctorID) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-    const objectIdDoctorID = new mongoose.Types.ObjectId(doctorID);
-    // Fetch appointments for the logged-in doctor
-    const appointments = await AppointmentModel.find({ doctorID: objectIdDoctorID });
-    // const appointments = await AppointmentModel.find({ doctorID });
 
-    res.json(appointments);
-  } catch (error) {
-    console.error("Error fetching appointments:", error); // Log for debugging
-    res.status(500).json({ message: "Server error" });
-  }
-});
+// router.get("/", authenticate, async (req, res) => {
+//   try {
+//     const { doctorID } = req.user; // Extract doctorID from middleware
+
+//     if (!doctorID) {
+//       return res.status(401).json({ message: "Unauthorized" });
+//     }
+//     const objectIdDoctorID = new mongoose.Types.ObjectId(doctorID);
+//     // Fetch appointments for the logged-in doctor
+//     const appointments = await AppointmentModel.find({ doctorID: objectIdDoctorID });
+//     // const appointments = await AppointmentModel.find({ doctorID });
+
+//     res.json(appointments);
+//   } catch (error) {
+//     console.error("Error fetching appointments:", error); // Log for debugging
+//     res.status(500).json({ message: "Server error" });
+//   }
+// });
 
 router.post("/create", async (req, res) => {
   const payload = req.body;
