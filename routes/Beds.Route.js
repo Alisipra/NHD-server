@@ -5,20 +5,13 @@ const router = express.Router();
 
 router.get("/available", async (req, res) => {
   try {
-    const beds = await BedModel.find().populate([
-      {
-        path: "patientID",
-        populate: {
-          path: "docID",
-        },
-      },
-      {
-        path: "patientID",
-        populate: {
-          path: "nurseID",
-        },
-      },
-    ]);
+    const beds = await BedModel.find().populate({
+  path: "patientID",
+  populate: [
+    { path: "docID" },
+    { path: "nurseID" },
+  ],
+});
     res.status(200).send(beds);
   } catch (error) {
     console.log(error);
@@ -27,14 +20,18 @@ router.get("/available", async (req, res) => {
 });
 // Get all beds in a specific ward
 router.get('/by-ward/:wardName', async (req, res) => {
-  const { wardName } = req.params;  // Get ward name from URL
+  const { wardName } = req.params;
   try {
-    const beds = await BedModel.find({ ward: wardName });  // Find beds by ward
-    res.status(200).json(beds);  // Return the list of beds in that ward
+    const beds = await BedModel.find({ ward: wardName }).populate({
+    path: "patientID",
+    select: "patientName disease doctorAssigned", // pick fields you want to display
+  })
+    res.status(200).json(beds);
   } catch (error) {
     res.status(500).send({ error: 'Unable to fetch beds by ward' });
   }
 });
+
 router.post("/single", async (req, res) => {
   const { bedNumber, roomNumber } = req.body;
   try {
@@ -64,6 +61,10 @@ router.post("/add", async (req, res) => {
       return res.send({ message: "Bed added successfully", bed });
     }
   } catch (error) {
+     if (error.code === 11000) {
+      // Duplicate key error
+      return res.status(400).send({ message: "Bed with same number already exists in this room." });
+    }
     res.send("Something went wrong, unable to add Bed.");
     console.log(error);
   }

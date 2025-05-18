@@ -111,7 +111,7 @@ router.post("/admitPatient", async (req, res) => {
 
     if (patientExists) {
       return res.status(409).json({
-        message: "Patient already exists",
+        message: "Patient already admitted",
         id: patientExists.patientID,
       });
     }
@@ -146,10 +146,19 @@ router.post("/admitPatient", async (req, res) => {
 
 
      // 2. Update bed status to 'occupied'
-     await BedModel.findOneAndUpdate(
-      { bedNumber, roomNumber: roomNo },
-      { occupied: "occupied" }
-    );
+    //  await BedModel.findOneAndUpdate(
+    //   { bedNumber, roomNumber: roomNo },
+    //   { occupied: "occupied" }
+    // );
+    
+    await BedModel.findOneAndUpdate(
+  { bedNumber, roomNumber: roomNo },
+  {
+    occupied: "occupied",
+    patientID: newPatient._id,  // <-- Link patient to bed
+  }
+);
+
     return res.status(201).json({
       message: "Patient admitted successfully.",
       id: newPatient.patientID,
@@ -179,6 +188,7 @@ router.post("/login", async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "24h" }
     );
+  
 
     // ✅ Fetch Reports Related to Patient
     const report = await ReportModel.find({ patientID });

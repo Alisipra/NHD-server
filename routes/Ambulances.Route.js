@@ -16,15 +16,25 @@ router.get("/", async (req, res) => {
 
 router.post("/add", async (req, res) => {
   const payload = req.body;
+
   try {
-    
+    // Check if ambulance with the same ambulanceID already exists
+    const existingAmbulance = await AmbulanceModel.findOne({ ambulanceID: payload.ambulanceID });
+
+    if (existingAmbulance) {
+      return res.status(400).send({ message: "Ambulance already present with this ID" });
+    }
+
     const ambulance = new AmbulanceModel(payload);
     await ambulance.save();
+    return res.send({ message: "Ambulance Added Successfully" });
+
   } catch (error) {
-    res.send(error);
+    console.error("Error adding ambulance:", error);
+    return res.status(500).send({ message: "Something went wrong", error });
   }
-  res.send("Ambulance Added Successfully");
 });
+
 
 router.patch("/:ambulanceId", async (req, res) => {
   const id = req.params.ambulanceId;

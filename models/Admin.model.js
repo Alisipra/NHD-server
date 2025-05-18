@@ -35,7 +35,7 @@ const adminSchema = mongoose.Schema({
 
   mobile: {
     type: Number,
-    minlength: 10,
+    minlength: 11,
   },
 
   DOB: {

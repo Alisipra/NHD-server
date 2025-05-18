@@ -1,6 +1,7 @@
 const express = require("express");
 const { AppointmentModel } = require("../models/Appointment.model");
-const { authenticate } = require("../middlewares/doctorAuth");
+// const { authenticate } = require("../middlewares/doctorAuth");
+const { authenticate } = require("../middlewares/patientAuth");
 const { default: mongoose } = require("mongoose");
 const router = express.Router();
 
@@ -51,11 +52,9 @@ router.get("/", async (req, res) => {
 //   }
 // });
 
-router.post("/create", async (req, res) => {
+router.post("/create", authenticate,async (req, res) => {
   const payload = req.body;
-  // if (Object.values(payload).some((value) => !value)) {
-  //   return res.status(400).json({ message: "Please fill all the required fields." });
-  // }
+ 
   try {
    
     const appointment = new AppointmentModel(payload);

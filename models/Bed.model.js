@@ -20,9 +20,10 @@ const bedSchema = mongoose.Schema({
   },
   patientID: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "patient",
+    ref: "ipdPatient",
   },
 });
+bedSchema.index({ bedNumber: 1, roomNumber: 1 }, { unique: true });
 
 const BedModel = mongoose.model("bed", bedSchema);
 
