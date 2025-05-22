@@ -19,6 +19,17 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/ipdpatients", async (req, res) => {
+  try {
+    const patients = await IPDPatientModel.find();
+    res.status(200).send({ patients });
+  } catch (error) {
+    console.error("Error fetching patients:", error);
+    res.status(500).send({ error: "Something went wrong." });
+  }
+});
+
+
 //  Register a patient (Admin or Doctor)
 // router.post("/register", async (req, res) => {
 //   const { patientID } = req.body;
@@ -258,6 +269,44 @@ router.get("/:cnic", async (req, res) => {
     res.status(200).json({ patient, history });
   } catch (error) {
     res.status(500).json({ message: "Server Error", error });
+  }
+});
+
+
+router.post("/discharge", async (req, res) => {
+  const { patientID, bedNumber, roomNo } = req.body;
+
+  try {
+    // 1. Update bed to available
+    await BedModel.findOneAndUpdate(
+      { bedNumber, roomNumber: roomNo },
+      {
+        occupied: "available",
+        patientID: null
+      }
+    );
+
+    // 2. Remove patient from IPD list
+    const removedPatient = await IPDPatientModel.findOneAndDelete({ patientID });
+
+    if (!removedPatient) {
+      return res.status(404).json({ message: "Patient not found in IPD" });
+    }
+
+    res.status(200).json({ message: "Patient discharged successfully", removedPatient });
+  } catch (error) {
+    console.error("Error during discharge:", error);
+    res.status(500).json({ error: "Failed to discharge patient" });
+  }
+});
+// Example Express backend route
+router.delete('/discharge/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await IPDPatientModel.findByIdAndDelete(id); // or use update to mark as discharged
+    res.json({ message: 'Patient discharged' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error discharging patient' });
   }
 });
 
